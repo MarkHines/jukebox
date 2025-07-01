@@ -4,7 +4,7 @@ export default playlistsRouter;
 
 import { getAllPlaylists, getPlaylistById, createPlaylist } from '#db/queries/playlists';
 import { getTracksByPlaylists, getTrackById } from '#db/queries/tracks';
-import { playlistsTracks } from '#db/queries/playlistsTracks';
+import { playlistsTracks, getAllPlaylistsTracks } from '#db/queries/playlistsTracks';
 
 playlistsRouter.get(`/`, async(request, response) => {
   const allPlaylists = await getAllPlaylists();
@@ -63,7 +63,7 @@ playlistsRouter.post(`/:id/tracks`, async ( request, response) => {
   }
   const trackId = request.body.trackId
   if(/\D/.test(trackId)) {
-    response.status(400).send(`NOT A NIMBER`)
+    response.status(400).send(`NOT A NUMBER`)
   }
   const selectedTrack = await getTrackById(trackId)
   //console.log(selectedTrack)
@@ -74,11 +74,8 @@ playlistsRouter.post(`/:id/tracks`, async ( request, response) => {
   const selectedPlaylist = await getPlaylistById(id);
   if(!selectedPlaylist) {
     response.status(404).send(`PLAYLIST DOES NOT EXISTS`)
-  } else {
-    const [ newPlaylistTrack ] = await playlistsTracks(id, trackId)
-    console.log(selectedPlaylist)
-    response.status(201).send(newPlaylistTrack)
-    console.log(newPlaylistTrack)
-  }
-
+  } 
+  const [ newPlaylistTrack ] = await playlistsTracks(id, trackId)
+  response.status(201).send(newPlaylistTrack)
+  
 })

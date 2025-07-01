@@ -32,7 +32,7 @@ export const getTrackById = async (id) => {
 
 export const getTracksByPlaylists = async (playlistId) => {
   const sql = `
-    SELECT playlist_id, track_id, name AS "trackName", duration_ms 
+    SELECT track_id 
     FROM playlists_tracks 
     JOIN tracks ON playlists_tracks.track_id = tracks.id 
     WHERE playlist_id = $1;

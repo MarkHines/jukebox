@@ -14,3 +14,11 @@ app.get(`/`, (request, response) => {
 app.use(`/tracks`, tracksRouter)
 
 app.use(`/playlists`, playlistsRouter)
+
+app.use((error, request, response, next) => {
+  if(error.code === `23503` || `23505`){
+    return response.status(400).send(error.error)
+  }
+
+  next(error)
+})
